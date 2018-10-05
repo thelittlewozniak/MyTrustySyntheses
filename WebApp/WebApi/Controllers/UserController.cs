@@ -27,10 +27,11 @@ namespace WebApi.Controllers
             var u = (from e in _context.Users where e.Email == email && e.Password == password select e).FirstOrDefault();
             if (u != null)
             {
-                _context.Users.Where(e => e.Email == u.Email).First().LastLogin = DateTime.UtcNow;
+                var date = DateTime.UtcNow;
+                _context.Users.Where(e => e.Email == u.Email).First().LastLogin = date;
+                _context.Users.Where(e=>e.Email==u.Email).FirstOrDefault().AccessToken= Math.Abs(u.Email.GetHashCode() + u.Password.GetHashCode() * u.LastLogin.Ticks);
                 _context.SaveChanges();
-                u = (from e in _context.Users where e.Email == email && e.Password == password select e).FirstOrDefault();
-                return Math.Abs(u.Email.GetHashCode() + u.Password.GetHashCode() * u.LastLogin.Ticks);
+                return _context.Users.Where(e => e.Email == u.Email).FirstOrDefault().AccessToken;
             }
             else
                 return 0;
@@ -45,10 +46,11 @@ namespace WebApi.Controllers
                 byte[] data = System.Text.Encoding.ASCII.GetBytes(password);
                 data = new System.Security.Cryptography.SHA256Managed().ComputeHash(data);
                 password = System.Text.Encoding.ASCII.GetString(data);
-                _context.Users.Add(new SharedCode.User { Name = name, Firstname = firstname, Password = password, Email = email, StuPro = Convert.ToBoolean(stuPro), Experience = 0, CreationDate = DateTime.UtcNow, LastLogin = DateTime.UtcNow, });
+                var date = DateTime.UtcNow;
+                _context.Users.Add(new SharedCode.User { Name = name, Firstname = firstname, Password = password, Email = email, StuPro = Convert.ToBoolean(stuPro), Experience = 0, CreationDate = DateTime.UtcNow, LastLogin = date,AccessToken=(email.GetHashCode()+password.GetHashCode())*date.Ticks });
                 _context.SaveChanges();
                 u = (from e in _context.Users where e.Email == email select e).First();
-                return Math.Abs(u.Email.GetHashCode() + u.Password.GetHashCode() * u.LastLogin.Ticks);
+                return u.AccessToken;
             }
             else
                 return 0;

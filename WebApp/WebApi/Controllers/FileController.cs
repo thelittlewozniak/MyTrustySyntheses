@@ -17,9 +17,9 @@ namespace WebApi.Controllers
         {
             _context = context;
         }
-        public ActionResult<long> Add()
-        {
+        //public ActionResult<long> Add()
+        //{
 
-        }
+        //}
     }
 }
