@@ -29,7 +29,7 @@ namespace WebApi
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             var connection = @"Server=tcp:mtsdatabase.database.windows.net,1433;Initial Catalog=MtsDb;Persist Security Info=False;User ID=thelittlewozniak;Password=azerty1234@;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            services.AddDbContext<Context>(options => options.UseSqlServer(connection));
+            services.AddDbContext<Context>(options => options.UseSqlServer(connection,b=>b.MigrationsAssembly("WebApi")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
