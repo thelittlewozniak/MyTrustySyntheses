@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SharedCode;
 using WebApi.Models;
 
 namespace WebApi.Controllers
@@ -54,6 +56,20 @@ namespace WebApi.Controllers
             }
             else
                 return 0;
+        }
+        public ActionResult<User> SeeUser([FromBody] string id,[FromHeader] string AccessToken)
+        {
+            var u = (from e in _context.Users where e.AccessToken == Convert.ToInt64(AccessToken) select e).FirstOrDefault();
+            if (u != null)
+            {
+                var d = u.LastLogin.AddMinutes(15);
+                if (d.TimeOfDay < DateTime.UtcNow.TimeOfDay)
+                    return null;
+                else
+                    return (from e in _context.Users where e.Id == Convert.ToInt32(id) select e).Include(e => e.Files).FirstOrDefault();
+            }
+            else
+                return null;
         }
     }
 }
