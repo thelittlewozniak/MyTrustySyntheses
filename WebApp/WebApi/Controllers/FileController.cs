@@ -30,6 +30,15 @@ namespace WebApi.Controllers
             else
                 return 0;
         }
+        
+        //public ActionResult<long> Delete(File file, [FromHeader] long accessToken)
+        //{
+            
+        //}
 
+        //public ActionResult<long> Rate(File file, [FromHeader] long accessToken)
+        //{
+
+        //}
     }
 }
