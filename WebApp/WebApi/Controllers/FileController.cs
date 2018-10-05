@@ -18,10 +18,18 @@ namespace WebApi.Controllers
         {
             _context = context;
         }
-        //public ActionResult<long> Add(string name, string body,User creator,DateTime createdAt)
-        //{
-        //    var u = (from e in _context.Users where e.
-        //    _context.Files.Add(new SharedCode.File { Name = name, Body = body, Creator = creator, CreatedAt = DateTime.UtcNow});
-        //}
+        public ActionResult<long> Add(string name, string body, DateTime createdAt,Lesson lesson,[FromHeader] long accessToken)
+        {
+            var u = (from e in _context.Users where e.AccessToken == accessToken select e).FirstOrDefault();
+            if (u != null)
+            {
+                _context.Files.Add(new SharedCode.File { Name = name, Body = body, CreatedAt = DateTime.UtcNow, Creator = u, Lesson = lesson });
+                _context.SaveChanges();
+                return u.AccessToken;
+            }
+            else
+                return 0;
+        }
+
     }
 }
