@@ -56,9 +56,10 @@ namespace WebApp.Controllers
             FileJson JsonU = new FileJson();
             JsonU.Name = f.Name;
             JsonU.Body = f.Body;
+            JsonU.Lesson = new Lesson() { Name= "C# premier quad"};
             JsonU.CreatedAt = DateTime.Now;
-            //JsonU.AccessToken = long.Parse(HttpContext.Session.GetString("AccessToken"));
             HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Add("AccessToken", HttpContext.Session.GetString("AccessToken"));
             string json = JsonConvert.SerializeObject(JsonU);
             var res = await client.PostAsync("http://apimts.azurewebsites.net/api/File/AddFile", new StringContent(json, Encoding.UTF8, "application/json"));
             bool response = await res.Content.ReadAsAsync<bool>();
