@@ -45,9 +45,23 @@ namespace WebApp.Controllers
         }
 
         //Afficher un user
-        public IActionResult ShowUser()
+        public async Task<IActionResult> ShowUser()
         {
-            return View();
+            if (HttpContext.Session.GetString("AccessToken") != null && HttpContext.Session.GetString("AccessToken") != "0")
+            {
+                HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Add("AccessToken", HttpContext.Session.GetString("AccessToken"));
+                var res = await client.GetAsync("http://apimts.azurewebsites.net/api/User/SeeUser");
+                var responseString = await res.Content.ReadAsStringAsync();
+                var u= JsonConvert.DeserializeObject<User>(responseString);
+                ViewBag.user = u;
+                return View();
+            }
+            else
+            {
+                
+                return View("Index");
+            }
         }
 
         //Ajouter un cours

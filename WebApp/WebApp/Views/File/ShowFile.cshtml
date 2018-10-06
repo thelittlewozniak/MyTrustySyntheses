@@ -9,7 +9,7 @@
     <tbody>
         <tr>
             <td>Nom : @f.Name</td>
-            <td>Auteur : @f.Creator</td>
+            <td>Auteur : @f.Creator.Email</td>
             <td>Date Creation : @f.CreatedAt</td>
             <td>@Html.ActionLink("Trust", "AddTrustFile", "User", new { idFile = f }, null)</td>
             <td>@f.Body</td>

@@ -59,7 +59,7 @@ namespace WebApi.Controllers
         }
         [Route("SeeUser")]
         [HttpGet]
-        public ActionResult<User> SeeUser( string id,[FromHeader]string AccessToken)
+        public ActionResult<User> SeeUser([FromHeader]string AccessToken)
         {
             var u = (from e in _context.Users where e.AccessToken == Convert.ToInt64(AccessToken) select e).FirstOrDefault();
             if (u != null)
@@ -68,7 +68,7 @@ namespace WebApi.Controllers
                 if (d.TimeOfDay < DateTime.UtcNow.TimeOfDay)
                     return null;
                 else
-                    return (from e in _context.Users where e.Id == Convert.ToInt32(id) select e).FirstOrDefault();
+                    return (from e in _context.Users where e.AccessToken == Convert.ToInt64(AccessToken) select e).FirstOrDefault();
             }
             else
                 return null;

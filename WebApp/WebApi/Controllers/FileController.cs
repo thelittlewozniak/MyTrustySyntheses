@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SharedCode;
 using WebApi.Models;
 
@@ -81,9 +82,13 @@ namespace WebApi.Controllers
                     var f = (from p in _context.Files where p.Id == file.Id select p).FirstOrDefault();
                     if (f != null)
                     {
-                        _context.Grades.Add(new SharedCode.Grade { Creator = u, TrustLvl = trustLvl, CreationDate = DateTime.UtcNow, File = f });
-                        _context.Users.Where(e => e.Email == u.Email).FirstOrDefault().Experience += 5;
-                        _context.SaveChanges();
+                        var g = (from e in _context.Grades where e.Creator == u && e.File == f select e).FirstOrDefault();
+                        if(g!=null)
+                        {
+                            _context.Grades.Add(new SharedCode.Grade { Creator = u, TrustLvl = trustLvl, CreationDate = DateTime.UtcNow, File = f });
+                            _context.Users.Where(e => e.Email == u.Email).FirstOrDefault().Experience += 5;
+                            _context.SaveChanges();
+                        }
                     }
                     return true;
                 }
@@ -181,7 +186,7 @@ namespace WebApi.Controllers
                     return null;
                 else
                     //return (from e in _context.Files where e.Lesson.School==u.School select e).ToList();
-                    return (from e in _context.Files select e).ToList();
+                    return (from e in _context.Files select e).Include(e=>e.Creator).ToList();
             }
             else
                 return null;
