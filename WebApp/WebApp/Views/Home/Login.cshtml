@@ -1,0 +1,27 @@
+﻿@model SharedCode.User
+@{
+    ViewBag.Title = "Connexion";
+}
+
+<div class="container">
+    <h2>Connexion</h2>
+    @using (Html.BeginForm("LoginConf", "Home"))
+    {
+        <table>
+            <tr>
+                <td>@Html.LabelFor(model => model.Email)</td>
+                <td>@Html.TextBoxFor(model => model.Email)</td>
+                <td>@Html.ValidationMessageFor(model => model.Email)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(model => model.Password)</td>
+                <td>@Html.PasswordFor(model => model.Password)</td>
+                <td>@Html.ValidationMessageFor(model => model.Password)</td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Se Connecter" /></td>
+            </tr>
+        </table>
+    }
+    <div>@ViewBag.Message</div>
+</div>
