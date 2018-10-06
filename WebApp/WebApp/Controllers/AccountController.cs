@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 using SharedCode;
 using Newtonsoft.Json;
+using WebApi.Models;
+using System.Text;
 
 namespace WebApp.Controllers
 {
@@ -26,10 +28,21 @@ namespace WebApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        
+        //Register
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        //Login
+        public IActionResult Login()
+        {
+            return View();
+        }
+
         //Inscription Confirmation
         [HttpPost]
-        public IActionResult RegisterConf(User u)
+        public async Task<IActionResult> RegisterConfAsync(User u)
         {
             if (!ModelState.IsValid)
             {
@@ -43,9 +56,16 @@ namespace WebApp.Controllers
                 return View("Inscription");
             }*/
 
-
-
-            ViewBag.Message = "Compte créé avec succes !";
+            UserJson JsonU = new UserJson();
+            JsonU.email = u.Email;
+            JsonU.firstname = u.Firstname;
+            JsonU.name = u.Name;
+            JsonU.password = u.Password;
+            HttpClient client = new HttpClient();
+            string json = JsonConvert.SerializeObject(JsonU);
+            var res = await client.PostAsync("http://apimts.azurewebsites.net/api/User/Create", new StringContent(json, Encoding.UTF8, "application/json"));
+            var responseString = await res.Content.ReadAsStringAsync();
+            ViewBag.Message = responseString;//"Compte créé avec succes !";
             return RedirectToAction("Login");
         }
 

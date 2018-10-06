@@ -16,18 +16,6 @@ namespace WebApp.Controllers
             return View();
         }
 
-        //Register
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        //Login
-        public IActionResult Login()
-        {
-            return View();
-        }
-
         //About
         public IActionResult AboutUs()
         {

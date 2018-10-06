@@ -6,12 +6,29 @@
     <title>@ViewBag.Title</title>
 </head>
 <body>
-    @Html.Partial("NavbarChoice")
-
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                @Html.ActionLink("Accueil", "Index", "Home", new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-header">
+                @Html.ActionLink("A propos", "AboutUs", "Home")
+            </div>
+            <div class="navbar-header">
+                @Html.ActionLink("Inscription", "Register", "Account")
+            </div>
+            <div class="navbar-header">
+                @Html.ActionLink("Login", "Login", "Account")
+            </div>
+        </div>
+    </div>
     <div class="container body-content">
         @RenderBody()
 
-        @Html.Partial("Footer")
+        <hr />
+        <footer>
+            <p>@DateTime.Now.Year - Application Note</p>
+        </footer>
     </div>
 
 </body>

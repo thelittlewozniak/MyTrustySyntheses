@@ -4,10 +4,12 @@
 @{
     if (HttpContextAccessor.HttpContext.Session.GetString("??") != null)
     {
-        @Html.Partial("NavbarUser")
+        <!--Html.Partial("NavbarUser") -->
+        @await Html.PartialAsync("~/Views/Shared/NavbarUser.cshtml")
     }
     else
     {
-        @Html.Partial("NavbarDefault")
+        <!-- Html.Partial("NavbarDefault") -->
+        @await Html.PartialAsync("~/Views/Shared/NavbarDefault.cshtml")
     }
 }
