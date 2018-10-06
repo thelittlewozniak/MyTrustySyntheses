@@ -20,13 +20,14 @@ namespace WebApi.Controllers
             _context = context;
         }
         [Route("Login")]
-        [HttpGet]
-        public ActionResult<long> Login(string password,string email)
+        [HttpPost]
+        public ActionResult<long> Login(UserJson json)
         {
-            byte[] data = System.Text.Encoding.ASCII.GetBytes(password);
+            
+            byte[] data = System.Text.Encoding.ASCII.GetBytes(json.password);
             data = new System.Security.Cryptography.SHA256Managed().ComputeHash(data);
-            password = System.Text.Encoding.ASCII.GetString(data);
-            var u = (from e in _context.Users where e.Email == email && e.Password == password select e).FirstOrDefault();
+            json.password = System.Text.Encoding.ASCII.GetString(data);
+            var u = (from e in _context.Users where e.Email == json.email && e.Password == json.email select e).FirstOrDefault();
             if (u != null)
             {
                 var date = DateTime.UtcNow;
@@ -58,7 +59,7 @@ namespace WebApi.Controllers
                 return 0;
         }
         [Route("SeeUser")]
-        [HttpPost]
+        [HttpGet]
         public ActionResult<User> SeeUser( string id,[FromHeader]string AccessToken)
         {
             var u = (from e in _context.Users where e.AccessToken == Convert.ToInt64(AccessToken) select e).FirstOrDefault();
