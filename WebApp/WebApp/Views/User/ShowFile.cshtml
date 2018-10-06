@@ -1,28 +1,19 @@
 ﻿@using SharedCode
 @{
-    ViewData["Title"] = "User";
+    ViewBag.Title = "Consultation de la synthese";
     File f = ViewBag.file;
 }
 
+<h2>Consultation de la synthese</h2>
 
-<h2> Description du fichier </h2>
-
-<table>
-    <tr>
-        <th>Nom</th>
-        <th>Categorie</th>
-        <th>Date Creation</th>
-        <th>Createur</th>
-    </tr>
-    <tr>
-        <td>@f.Name</td>
-        <td>@f.Lesson</td>
-        <td>@f.CreatedAt</td>
-        <td>@f.Creator</td>
-    </tr>
+<table class="table">
+    <tbody>        
+        <tr>
+            <td>Nom : @f.Name</td>
+            <td>Auteur : @f.Creator</td>
+            <td>Date Creation : @f.CreatedAt</td>
+            <td>@Html.ActionLink("Trust", "AddTrustFile", "User", new { idFile = f }, null)</td>
+            <td>@f.Body</td>
+        </tr>
+    </tbody>
 </table>
-
-Contenu :
-@f.Body
-
-

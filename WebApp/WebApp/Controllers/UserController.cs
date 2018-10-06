@@ -33,13 +33,31 @@ namespace WebApp.Controllers
         }
 
         //Afficher une note
-        public IActionResult ShowNote()
+        public IActionResult ShowFile()
         {
             return View();
         }
 
         //Afficher un user
         public IActionResult ShowUser()
+        {
+            return View();
+        }
+
+        //Ajouter un cours
+        public IActionResult AddFile()
+        {
+            return View();
+        }
+
+        //Ajouter un cours Confirmation
+        public IActionResult AddFileConf()
+        {
+            return View();
+        }
+
+        //Trust
+        public IActionResult AddTrust()
         {
             return View();
         }
