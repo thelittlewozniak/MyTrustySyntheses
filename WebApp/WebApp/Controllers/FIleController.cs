@@ -36,6 +36,28 @@ namespace WebApp.Controllers
         {
             return View();
         }
+        public ActionResult ShowFile()
+        {
+            ShowFileAsync();
+            return View();
+        }
+        public async void ShowFileAsync()
+        {
+            if (HttpContext.Session.GetString("AccessToken") != null && HttpContext.Session.GetString("AccessToken") != "0")
+            {
+                HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Add("AccessToken", HttpContext.Session.GetString("AccessToken"));
+                var res = await client.GetAsync("https://localhost:44343/api/File/SeeFileCo");
+
+            }
+            else
+            {
+                ViewBag.tabFile[0] = null;
+                ViewBag.Message = "Erreur, vous n'êtes pas connecté !";
+            }
+            
+           
+        }
         [HttpPost]
         public async Task<IActionResult> AddFileConfAsync(File f)
         {
