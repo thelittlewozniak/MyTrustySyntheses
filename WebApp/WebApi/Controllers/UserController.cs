@@ -26,7 +26,7 @@ namespace WebApi.Controllers
             byte[] data = System.Text.Encoding.ASCII.GetBytes(json.password);
             data = new System.Security.Cryptography.SHA256Managed().ComputeHash(data);
             json.password = System.Text.Encoding.ASCII.GetString(data);
-            var u = (from e in _context.Users where e.Email == json.email && e.Password == json.email select e).FirstOrDefault();
+            var u = (from e in _context.Users where e.Email == json.email && e.Password == json.password select e).FirstOrDefault();
             if (u != null)
             {
                 var date = DateTime.UtcNow;

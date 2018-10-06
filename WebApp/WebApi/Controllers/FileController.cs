@@ -20,7 +20,7 @@ namespace WebApi.Controllers
         }
         [Route("AddFile")]
         [HttpPost]
-        public ActionResult<bool> Add(string name, string body, string lesson,[FromHeader] long accessToken)
+        public ActionResult<bool> Add(FileJson Json,[FromHeader] long accessToken)
         {
             var u = (from e in _context.Users where e.AccessToken == accessToken select e).FirstOrDefault();
             if (u != null)
@@ -30,10 +30,10 @@ namespace WebApi.Controllers
                     return false;
                 else
                 {
-                    var l = (from x in _context.Lessons where x.Name == lesson select x).FirstOrDefault();
+                    var l = (from x in _context.Lessons where x.Name == Json.Lesson.Name select x).FirstOrDefault();
                     if (l != null)
                     {
-                        _context.Files.Add(new SharedCode.File { Name = name, Body = body, CreatedAt = DateTime.UtcNow, Creator = u, Lesson = l });
+                        _context.Files.Add(new SharedCode.File { Name = Json.Name, Body = Json.Body, CreatedAt = DateTime.UtcNow, Creator = u, Lesson = l });
                         _context.Users.Where(e => e.Email == u.Email).FirstOrDefault().Experience += 10;
                         _context.SaveChanges();
                     }

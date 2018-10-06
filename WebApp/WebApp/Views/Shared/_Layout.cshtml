@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -6,22 +9,49 @@
     <title>@ViewBag.Title</title>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                @Html.ActionLink("Accueil", "Index", "Home", new { @class = "navbar-brand" })
+    @{
+        if (HttpContextAccessor.HttpContext.Session.GetString("AccessToken") != null)
+        {
+            <div class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        @Html.ActionLink("Accueil", "Index", "Home", new { @class = "navbar-brand" })
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Ajout de Synthese", "AddFile", "User")</li>
+                            <li>@Html.ActionLink("Recherche Note", "ResearchCourse", "User")</li>
+                            <li>@Html.ActionLink("Recherche Personne", "ResearchUser", "User")</li>
+                            <li>@Html.ActionLink("Mon Profil", "MyProfile", "User")</li>
+                            <li>@Html.ActionLink("A Propos", "AboutUs", "Home")</li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>@Html.ActionLink("Deconnexion", "Disconnect", "Account")</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="navbar-header">
-                @Html.ActionLink("A propos", "AboutUs", "Home")
+        }
+        else
+        {
+            <div class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        @Html.ActionLink("Accueil", "Index", "Home", new { @class = "navbar-brand" })
+                    </div>
+                    <div class="navbar-header">
+                        @Html.ActionLink("A propos", "AboutUs", "Home")
+                    </div>
+                    <div class="navbar-header">
+                        @Html.ActionLink("Inscription", "Register", "Home")
+                    </div>
+                    <div class="navbar-header">
+                        @Html.ActionLink("Login", "Login", "Home")
+                    </div>
+                </div>
             </div>
-            <div class="navbar-header">
-                @Html.ActionLink("Inscription", "Register", "Account")
-            </div>
-            <div class="navbar-header">
-                @Html.ActionLink("Login", "Login", "Account")
-            </div>
-        </div>
-    </div>
+        }
+    }
     <div class="container body-content">
         @RenderBody()
 
