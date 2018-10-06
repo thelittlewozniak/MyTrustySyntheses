@@ -10,6 +10,13 @@
   </ItemGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
+=======
+    <Folder Include="Views\Account\" />
+  </ItemGroup>
+
+  <ItemGroup>
+>>>>>>> 0ff6f228f7a57b010da1850c3f2a74b73bcc65ff
     <ProjectReference Include="..\SharedCode\SharedCode.csproj" />
   </ItemGroup>
 

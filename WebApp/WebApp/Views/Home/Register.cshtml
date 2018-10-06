@@ -6,7 +6,11 @@
 <div class="container">
     <h2>Inscription</h2>
 
+<<<<<<< HEAD
     @using (Html.BeginForm("RegisterConfAsync", "Home"))
+=======
+    @using (Html.BeginForm("RegisterConf", "Account"))
+>>>>>>> 0ff6f228f7a57b010da1850c3f2a74b73bcc65ff
     {
         <div class="form-group">
             @Html.LabelFor(model => model.Name)
@@ -20,7 +24,11 @@
         </div>
         <div class="form-group">
             @Html.LabelFor(model => model.Password)
+<<<<<<< HEAD
             @Html.PasswordFor(model => model.Password)
+=======
+            @Html.TextBoxFor(model => model.Password)
+>>>>>>> 0ff6f228f7a57b010da1850c3f2a74b73bcc65ff
             @Html.ValidationMessageFor(model => model.Password)
         </div>
         <div class="form-group">

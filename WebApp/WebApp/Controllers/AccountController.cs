@@ -7,8 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 using SharedCode;
 using Newtonsoft.Json;
+<<<<<<< HEAD
 using WebApi.Models;
 using System.Text;
+=======
+>>>>>>> 0ff6f228f7a57b010da1850c3f2a74b73bcc65ff
 
 namespace WebApp.Controllers
 {
@@ -28,6 +31,7 @@ namespace WebApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+<<<<<<< HEAD
         //Register
         public IActionResult Register()
         {
@@ -43,6 +47,12 @@ namespace WebApp.Controllers
         //Inscription Confirmation
         [HttpPost]
         public async Task<IActionResult> RegisterConfAsync(User u)
+=======
+        
+        //Inscription Confirmation
+        [HttpPost]
+        public IActionResult RegisterConf(User u)
+>>>>>>> 0ff6f228f7a57b010da1850c3f2a74b73bcc65ff
         {
             if (!ModelState.IsValid)
             {
@@ -56,6 +66,7 @@ namespace WebApp.Controllers
                 return View("Inscription");
             }*/
 
+<<<<<<< HEAD
             UserJson JsonU = new UserJson();
             JsonU.email = u.Email;
             JsonU.firstname = u.Firstname;
@@ -66,6 +77,11 @@ namespace WebApp.Controllers
             var res = await client.PostAsync("http://apimts.azurewebsites.net/api/User/Create", new StringContent(json, Encoding.UTF8, "application/json"));
             var responseString = await res.Content.ReadAsStringAsync();
             ViewBag.Message = responseString;//"Compte créé avec succes !";
+=======
+
+
+            ViewBag.Message = "Compte créé avec succes !";
+>>>>>>> 0ff6f228f7a57b010da1850c3f2a74b73bcc65ff
             return RedirectToAction("Login");
         }
 

@@ -21,6 +21,7 @@ namespace WebApp.Controllers
             return View();
         }
 
+<<<<<<< HEAD
         //About
         public IActionResult AboutUs()
         {
@@ -30,13 +31,29 @@ namespace WebApp.Controllers
 
         //Register
         public IActionResult Register()
+=======
+        //Register
+        public IActionResult Register()
         {
             return View();
         }
 
         //Login
         public IActionResult Login()
+>>>>>>> 0ff6f228f7a57b010da1850c3f2a74b73bcc65ff
         {
+            return View();
+        }
+
+<<<<<<< HEAD
+        //Login
+        public IActionResult Login()
+=======
+        //About
+        public IActionResult AboutUs()
+>>>>>>> 0ff6f228f7a57b010da1850c3f2a74b73bcc65ff
+        {
+            ViewData["Message"] = "GameJam 2018 KYT";
             return View();
         }
 

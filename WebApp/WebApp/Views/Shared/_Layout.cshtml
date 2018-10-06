@@ -6,6 +6,7 @@
     <title>@ViewBag.Title</title>
 </head>
 <body>
+<<<<<<< HEAD
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -31,5 +32,15 @@
         </footer>
     </div>
 
+=======
+    @Html.Partial("NavbarChoice")
+
+    <div class="container body-content">
+        @RenderBody()
+
+        @Html.Partial("Footer")
+    </div>
+
+>>>>>>> 0ff6f228f7a57b010da1850c3f2a74b73bcc65ff
 </body>
 </html>
