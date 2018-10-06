@@ -69,7 +69,7 @@ namespace WebApp.Controllers
             var res = await client.PostAsync("http://apimts.azurewebsites.net/api/User/Login", new StringContent(json, Encoding.UTF8, "application/json"));
             var responseString = await res.Content.ReadAsStringAsync();
             string AccessToken = JsonConvert.DeserializeObject<string>(responseString);
-            HttpContext.Session.SetString("AccessToken", AccessToken);
+            HttpContext.Session.SetString("AccessToken", Convert.ToString(AccessToken));
             return View("Login");
         }
 
