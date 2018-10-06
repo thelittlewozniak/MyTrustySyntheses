@@ -17,7 +17,6 @@ namespace WebApp.Controllers
         {
             return View();
         }
-
         //About
         public IActionResult AboutUs()
         {
