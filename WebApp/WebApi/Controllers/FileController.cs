@@ -91,7 +91,7 @@ namespace WebApi.Controllers
         }
         [Route("SimpleSearchContentFile")]
         [HttpPost]
-        public List<File> SimpleSearchContent(string search)
+        public ActionResult<List<File>> SimpleSearchContent(string search)
         {
             List<File> list = new List<File>();
 
@@ -107,7 +107,7 @@ namespace WebApi.Controllers
 
         [Route("SimpleSearchUserFile")]
         [HttpPost]
-        public List<User> SimpleSearchUser(string search) //IL faut préciser dans le placeholder que c'est le nom qui doit être entrer en 1er et ensuite le prénom
+        public ActionResult<List<User>> SimpleSearchUser(string search) //IL faut préciser dans le placeholder que c'est le nom qui doit être entrer en 1er et ensuite le prénom
         {
             List<User> list = new List<User>();
             string find = " ";
