@@ -20,78 +20,103 @@ namespace WebApi.Controllers
         }
         [Route("AddFile")]
         [HttpPost]
-        public ActionResult<long> Add(string name, string body, string lesson,[FromHeader] long accessToken)
+        public ActionResult<bool> Add(string name, string body, string lesson,[FromHeader] long accessToken)
         {
             var u = (from e in _context.Users where e.AccessToken == accessToken select e).FirstOrDefault();
             if (u != null)
             {
-                var l = (from x in _context.Lessons where x.Name == lesson select x).FirstOrDefault();
-                if(l != null)
+                var d = u.LastLogin.AddMinutes(15);
+                if (d.TimeOfDay < DateTime.UtcNow.TimeOfDay)
+                    return false;
+                else
                 {
-                    _context.Files.Add(new SharedCode.File { Name = name, Body = body, CreatedAt = DateTime.UtcNow, Creator = u, Lesson = l });
-                    _context.SaveChanges();
+                    var l = (from x in _context.Lessons where x.Name == lesson select x).FirstOrDefault();
+                    if (l != null)
+                    {
+                        _context.Files.Add(new SharedCode.File { Name = name, Body = body, CreatedAt = DateTime.UtcNow, Creator = u, Lesson = l });
+                        _context.SaveChanges();
+                    }
+                    return true;
                 }
-                return u.AccessToken;
             }
             else
-                return 0;
+                return false;
         }
         [Route("DeleteFile")]
-        public ActionResult<long> Delete(File file, [FromHeader] long accessToken)
+        public ActionResult<bool> Delete(File file, [FromHeader] long accessToken)
         {
             var u = (from e in _context.Users where e.AccessToken == accessToken select e).FirstOrDefault();
             if (u != null)
             {
-                var f = (from p in _context.Files where p.Id == file.Id select p).FirstOrDefault();
-                if(f != null){
-                    _context.Files.Remove(f);
-                    _context.SaveChanges();
+                var d = u.LastLogin.AddMinutes(15);
+                if (d.TimeOfDay < DateTime.UtcNow.TimeOfDay)
+                    return false;
+                else
+                {
+                    var f = (from p in _context.Files where p.Id == file.Id select p).FirstOrDefault();
+                    if (f != null)
+                    {
+                        _context.Files.Remove(f);
+                        _context.SaveChanges();
+                    }
+                    return true;
                 }
-                return u.AccessToken;
             }
             else
-                return 0;
+                return false;
         }
         [Route("RateFile")]
         [HttpPost]
-        public ActionResult<long> Rate(int trustLvl,File file, [FromHeader] long accessToken)
+        public ActionResult<bool> Rate(int trustLvl,File file, [FromHeader] long accessToken)
         {
             var u = (from e in _context.Users where e.AccessToken == accessToken select e).FirstOrDefault();
             if (u != null)
             {
-                var f = (from p in _context.Files where p.Id == file.Id select p).FirstOrDefault();
-                if (f != null)
+                var d = u.LastLogin.AddMinutes(15);
+                if (d.TimeOfDay < DateTime.UtcNow.TimeOfDay)
+                    return false;
+                else
                 {
-                    _context.Grades.Add(new SharedCode.Grade { Creator = u, TrustLvl = trustLvl, CreationDate = DateTime.UtcNow, File = f});
-                    _context.SaveChanges();
+                    var f = (from p in _context.Files where p.Id == file.Id select p).FirstOrDefault();
+                    if (f != null)
+                    {
+                        _context.Grades.Add(new SharedCode.Grade { Creator = u, TrustLvl = trustLvl, CreationDate = DateTime.UtcNow, File = f });
+                        _context.SaveChanges();
+                    }
+                    return true;
                 }
-                return u.AccessToken;
             }
             else
-                return 0;
+                return false;
         }
         [Route("AlterFile")]
         [HttpPost]
-        public ActionResult<long> Alter(string title, string body,File oldFile,[FromHeader] long accessToken)
+        public ActionResult<bool> Alter(string title, string body,File oldFile,[FromHeader] long accessToken)
         {
             var u = (from e in _context.Users where e.AccessToken == accessToken select e).FirstOrDefault();
             if (u != null)
             {
-                if (oldFile.Creator == u)
+                var d = u.LastLogin.AddMinutes(15);
+                if (d.TimeOfDay < DateTime.UtcNow.TimeOfDay)
+                    return false;
+                else
                 {
-                    var f = (from p in _context.Files where p.Id == oldFile.Id select p).FirstOrDefault();
-                    _context.Files.Add(new SharedCode.File { Name = title, Body = body, CreatedAt = DateTime.UtcNow, Creator = u, Lesson = oldFile.Lesson });
-                    _context.Files.Remove(f);
-                    _context.SaveChanges();
+                    if (oldFile.Creator == u)
+                    {
+                        var f = (from p in _context.Files where p.Id == oldFile.Id select p).FirstOrDefault();
+                        _context.Files.Add(new SharedCode.File { Name = title, Body = body, CreatedAt = DateTime.UtcNow, Creator = u, Lesson = oldFile.Lesson });
+                        _context.Files.Remove(f);
+                        _context.SaveChanges();
+                    }
+                    return true;
                 }
-                return accessToken;
             }
             else
-                return 0;
+                return false;
         }
         [Route("SimpleSearchContentFile")]
         [HttpPost]
-        public List<File> SimpleSearchContent(string search)
+        public ActionResult<List<File>> SimpleSearchContent(string search)
         {
             List<File> list = new List<File>();
 
@@ -107,7 +132,7 @@ namespace WebApi.Controllers
 
         [Route("SimpleSearchUserFile")]
         [HttpPost]
-        public List<User> SimpleSearchUser(string search) //IL faut préciser dans le placeholder que c'est le nom qui doit être entrer en 1er et ensuite le prénom
+        public ActionResult<List<User>> SimpleSearchUser(string search) //IL faut préciser dans le placeholder que c'est le nom qui doit être entrer en 1er et ensuite le prénom
         {
             List<User> list = new List<User>();
             string find = " ";
@@ -122,6 +147,28 @@ namespace WebApi.Controllers
                 }
             }
             return list;
+        }
+        [Route("SeeFileCo")]
+        [HttpPost]
+        public ActionResult<List<File>> SeeFileCo([FromHeader] string AccessToken)
+        {
+            var u = (from e in _context.Users where e.AccessToken == Convert.ToInt64(AccessToken) select e).FirstOrDefault();
+            if (u != null)
+            {
+                var d = u.LastLogin.AddMinutes(15);
+                if (d.TimeOfDay < DateTime.UtcNow.TimeOfDay)
+                    return null;
+                else
+                    return (from e in _context.Files where e.Lesson.School==u.School select e).ToList();
+            }
+            else
+                return null;
+        }
+        [Route("SeeFileUnco")]
+        [HttpGet]
+        public ActionResult<List<File>> SeeFileUnco()
+        {
+            return _context.Files.ToList();
         }
     }
 }

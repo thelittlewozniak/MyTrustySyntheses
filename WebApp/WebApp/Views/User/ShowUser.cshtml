@@ -1,0 +1,17 @@
+﻿@using SharedCode
+@{
+    ViewBag.Title = "Consultation d'un utilisateur";
+    User u = ViewBag.user;
+}
+
+<h2>Consultation d'un utilisateur</h2>
+
+<table class="table">
+    <tbody>
+        <tr>
+            <td>Nom : @u.Name</td>
+            <td>Prenom : @u.Firstname</td>
+            <td>@Html.ActionLink("Trust", "AddTrustUser", "User", new { idUser = u }, null)</td>
+        </tr>
+    </tbody>
+</table>

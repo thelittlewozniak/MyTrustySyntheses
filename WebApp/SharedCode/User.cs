@@ -13,6 +13,7 @@ namespace SharedCode
         public string Email { get; set; }
         public int Experience { get; set; }
         public bool StuPro { get; set; }
+        public string School { get; set; }
         public long AccessToken { get; set; }
         public List<User> Trusters { get; set; }
         public DateTime CreationDate { get; set; }
