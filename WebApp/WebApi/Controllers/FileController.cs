@@ -34,6 +34,7 @@ namespace WebApi.Controllers
                     if (l != null)
                     {
                         _context.Files.Add(new SharedCode.File { Name = name, Body = body, CreatedAt = DateTime.UtcNow, Creator = u, Lesson = l });
+                        _context.Users.Where(e => e.Email == u.Email).FirstOrDefault().Experience += 10;
                         _context.SaveChanges();
                     }
                     return true;
