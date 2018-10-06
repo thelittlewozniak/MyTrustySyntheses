@@ -70,5 +70,24 @@ namespace WebApi.Controllers
             else
                 return 0;
         }
+        [Route("AlterFile")]
+        [HttpPost]
+        public ActionResult<long> Alter(string title, string body,File oldFile,[FromHeader] long accessToken)
+        {
+            var u = (from e in _context.Users where e.AccessToken == accessToken select e).FirstOrDefault();
+            if (u != null)
+            {
+                if (oldFile.Creator == u)
+                {
+                    var f = (from p in _context.Files where p.Id == oldFile.Id select p).FirstOrDefault();
+                    _context.Files.Add(new SharedCode.File { Name = title, Body = body, CreatedAt = DateTime.UtcNow, Creator = u, Lesson = oldFile.Lesson });
+                    _context.Files.Remove(f);
+                    _context.SaveChanges();
+                }
+                return accessToken;
+            }
+            else
+                return 0;
+        }
     }
 }
