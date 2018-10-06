@@ -69,7 +69,7 @@ namespace WebApi.Controllers
         }
         [Route("RateFile")]
         [HttpPost]
-        public ActionResult<bool> Rate(int trustLvl,File file, [FromHeader] long accessToken)
+        public ActionResult<bool> Rate(GradeJson json, [FromHeader] long accessToken)
         {
             var u = (from e in _context.Users where e.AccessToken == accessToken select e).FirstOrDefault();
             if (u != null)
@@ -79,13 +79,13 @@ namespace WebApi.Controllers
                     return false;
                 else
                 {
-                    var f = (from p in _context.Files where p.Id == file.Id select p).FirstOrDefault();
+                    var f = (from p in _context.Files where p.Id == Convert.ToInt32(json.idFile) select p).FirstOrDefault();
                     if (f != null)
                     {
                         var g = (from e in _context.Grades where e.Creator == u && e.File == f select e).FirstOrDefault();
-                        if(g!=null)
+                        if(g==null)
                         {
-                            _context.Grades.Add(new SharedCode.Grade { Creator = u, TrustLvl = trustLvl, CreationDate = DateTime.UtcNow, File = f });
+                            _context.Grades.Add(new SharedCode.Grade { Creator = u, TrustLvl = json.trustlvl, CreationDate = DateTime.UtcNow, File = f });
                             _context.Users.Where(e => e.Email == u.Email).FirstOrDefault().Experience += 5;
                             _context.SaveChanges();
                         }

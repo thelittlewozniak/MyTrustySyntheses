@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "Ajouter une note";
+}
+
+<h2>Ajouter une note</h2>
+<div>
+    @using (Html.BeginForm("AddTrustVerif", "File"))
+    {
+        <div class="form-group">
+            <input name="trstlvl" type="text" />
+        </div>
+        <div class="form-group">
+            <input name="idFIle" hidden="hidden" type="text" value="@ViewBag.fileId"/>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Sauvegarder" />
+        </div>
+    }
+    <div>@ViewBag.Message</div>
+</div>

@@ -90,7 +90,35 @@ namespace WebApp.Controllers
             string access = HttpContext.Session.GetString("test");
             client.DefaultRequestHeaders.Add("AccessToken", HttpContext.Session.GetString("AccessToken"));
             string json = JsonConvert.SerializeObject(JsonU);
-            var res = await client.PostAsync("https://localhost:44343/api/File/AddFile", new StringContent(json, Encoding.UTF8, "application/json"));
+            var res = await client.PostAsync("http://apimts.azurewebsites.net/api/File/AddFile", new StringContent(json, Encoding.UTF8, "application/json"));
+            bool response = await res.Content.ReadAsAsync<bool>();
+            if (response)
+            {
+                ViewBag.Message = "Fichier créé !";
+            }
+            else
+            {
+                ViewBag.Message = "Erreur lors de la création du fichier";
+            }
+            return View("AddFile");
+        }
+        public ActionResult AddTrust(int idFile)
+        {
+            ViewBag.fileId = idFile;
+            return View();
+        }
+
+        //Addnote
+        [HttpPost]
+        public async Task<IActionResult> AddTrustVerif(string trstlvl,string idFile)
+        {
+            GradeJson JsonU = new GradeJson();
+            JsonU.trustlvl = Convert.ToInt32(trstlvl);
+            JsonU.idFile = idFile;
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Add("AccessToken", HttpContext.Session.GetString("AccessToken"));
+            string json = JsonConvert.SerializeObject(JsonU);
+            var res = await client.PostAsync("http://apimts.azurewebsites.net/api/File/RateFile", new StringContent(json, Encoding.UTF8, "application/json"));
             bool response = await res.Content.ReadAsAsync<bool>();
             if (response)
             {
@@ -103,6 +131,5 @@ namespace WebApp.Controllers
             return View("AddFile");
         }
 
-  
     }
 }
