@@ -51,29 +51,7 @@ namespace WebApp.Controllers
         }
 
         //Ajouter un cours
-        public async Task<IActionResult> AddFileConfAsync(File f)
-        {
-            FileJson JsonU = new FileJson();
-            JsonU.Name = f.Name;
-            JsonU.Body = f.Body;
-            JsonU.Lesson = new Lesson() { Name= "C# premier quad"};
-            JsonU.CreatedAt = DateTime.Now;
-            HttpClient client = new HttpClient();
-            string access = HttpContext.Session.GetString("test");
-            client.DefaultRequestHeaders.Add("AccessToken", HttpContext.Session.GetString("AccessToken"));
-            string json = JsonConvert.SerializeObject(JsonU);
-            var res = await client.PostAsync("https://localhost:44343/api/File/AddFile", new StringContent(json, Encoding.UTF8, "application/json"));
-            bool response = await res.Content.ReadAsAsync<bool>();
-            if (response)
-            {
-                ViewBag.Message = "Fichier créé !";
-            }
-            else
-            {
-                ViewBag.Message = "Erreur lors de la création du fichier";
-            }
-            return View("ShowFile");
-        }
+       
 
         //Ajouter un cours Confirmation
         public IActionResult AddFile()

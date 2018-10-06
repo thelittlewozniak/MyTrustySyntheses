@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SharedCode;
+using WebApi.Models;
+using System.Text;
 
 namespace WebApp.Controllers
 {
-    public class FIleController : Controller
+    public class FileController : Controller
     {
         private static readonly HttpClient client = new HttpClient();
         public async Task<IActionResult> Index()
@@ -30,5 +32,35 @@ namespace WebApp.Controllers
             ViewBag.files = files;//"Compte créé avec succes !";
             return View();
         }
+        public ActionResult AddFile()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddFileConfAsync(File f)
+        {
+            FileJson JsonU = new FileJson();
+            JsonU.Name = f.Name;
+            JsonU.Body = f.Body;
+            JsonU.Lesson = new Lesson() { Name = "C# premier quad" };
+            JsonU.CreatedAt = DateTime.Now;
+            HttpClient client = new HttpClient();
+            string access = HttpContext.Session.GetString("test");
+            client.DefaultRequestHeaders.Add("AccessToken", HttpContext.Session.GetString("AccessToken"));
+            string json = JsonConvert.SerializeObject(JsonU);
+            var res = await client.PostAsync("https://localhost:44343/api/File/AddFile", new StringContent(json, Encoding.UTF8, "application/json"));
+            bool response = await res.Content.ReadAsAsync<bool>();
+            if (response)
+            {
+                ViewBag.Message = "Fichier créé !";
+            }
+            else
+            {
+                ViewBag.Message = "Erreur lors de la création du fichier";
+            }
+            return View("AddFile");
+        }
+
+  
     }
 }
