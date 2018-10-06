@@ -30,15 +30,38 @@ namespace WebApi.Controllers
             else
                 return 0;
         }
-        
-        //public ActionResult<long> Delete(File file, [FromHeader] long accessToken)
-        //{
-            
-        //}
 
-        //public ActionResult<long> Rate(File file, [FromHeader] long accessToken)
-        //{
+        public ActionResult<long> Delete(File file, [FromHeader] long accessToken)
+        {
+            var u = (from e in _context.Users where e.AccessToken == accessToken select e).FirstOrDefault();
+            if (u != null)
+            {
+                var f = (from p in _context.Files where p.Id == file.Id select p).FirstOrDefault();
+                if(f != null){
+                    _context.Files.Remove(f);
+                    _context.SaveChanges();
+                }
+                return u.AccessToken;
+            }
+            else
+                return 0;
+        }
 
-        //}
+        public ActionResult<long> Rate(int trustLvl,File file, [FromHeader] long accessToken)
+        {
+            var u = (from e in _context.Users where e.AccessToken == accessToken select e).FirstOrDefault();
+            if (u != null)
+            {
+                var f = (from p in _context.Files where p.Id == file.Id select p).FirstOrDefault();
+                if (f != null)
+                {
+                    _context.Grades.Add(new SharedCode.Grade { Creator = u, TrustLvl = trustLvl, CreationDate = DateTime.UtcNow, File = f});
+                    _context.SaveChanges();
+                }
+                return u.AccessToken;
+            }
+            else
+                return 0;
+        }
     }
 }
