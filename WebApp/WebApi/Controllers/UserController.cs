@@ -41,18 +41,18 @@ namespace WebApi.Controllers
         }
         [Route("Create")]
         [HttpPost]
-        public ActionResult<long> Create(string name,string firstname,string password,string email,string stuPro)
+        public ActionResult<long> Create(UserJson json)
         {
             var u = (from e in _context.Users where e.Email == email select e).FirstOrDefault();
             if (u == null)
             {
-                byte[] data = System.Text.Encoding.ASCII.GetBytes(password);
+                byte[] data = System.Text.Encoding.ASCII.GetBytes(json.password);
                 data = new System.Security.Cryptography.SHA256Managed().ComputeHash(data);
-                password = System.Text.Encoding.ASCII.GetString(data);
+                json.password = System.Text.Encoding.ASCII.GetString(data);
                 var date = DateTime.UtcNow;
-                _context.Users.Add(new SharedCode.User { Name = name, Firstname = firstname, Password = password, Email = email, StuPro = Convert.ToBoolean(stuPro), Experience = 0, CreationDate = DateTime.UtcNow, LastLogin = date,AccessToken=Math.Abs(email.GetHashCode()+password.GetHashCode())*date.Ticks });
+                _context.Users.Add(new SharedCode.User { Name = json.name, Firstname = json.firstname, Password = json.password, Email = json.email, StuPro = json.stuPro, Experience = 0, CreationDate = DateTime.UtcNow, LastLogin = date,AccessToken=Math.Abs(json.email.GetHashCode()+json.password.GetHashCode())*date.Ticks });
                 _context.SaveChanges();
-                u = (from e in _context.Users where e.Email == email select e).First();
+                u = (from e in _context.Users where e.Email == json.email select e).First();
                 return u.AccessToken;
             }
             else
