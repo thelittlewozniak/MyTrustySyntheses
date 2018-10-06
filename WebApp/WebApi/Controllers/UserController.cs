@@ -20,7 +20,7 @@ namespace WebApi.Controllers
             _context = context;
         }
         [Route("Login")]
-        [HttpPost]
+        [HttpGet]
         public ActionResult<long> Login(string password,string email)
         {
             byte[] data = System.Text.Encoding.ASCII.GetBytes(password);
@@ -39,7 +39,7 @@ namespace WebApi.Controllers
                 return 0;
         }
         [Route("Create")]
-        [HttpPost]
+        [HttpGet]
         public ActionResult<long> Create(string name,string firstname,string password,string email,string stuPro)
         {
             var u = (from e in _context.Users where e.Email == email select e).FirstOrDefault();
@@ -49,7 +49,7 @@ namespace WebApi.Controllers
                 data = new System.Security.Cryptography.SHA256Managed().ComputeHash(data);
                 password = System.Text.Encoding.ASCII.GetString(data);
                 var date = DateTime.UtcNow;
-                _context.Users.Add(new SharedCode.User { Name = name, Firstname = firstname, Password = password, Email = email, StuPro = Convert.ToBoolean(stuPro), Experience = 0, CreationDate = DateTime.UtcNow, LastLogin = date,AccessToken=(email.GetHashCode()+password.GetHashCode())*date.Ticks });
+                _context.Users.Add(new SharedCode.User { Name = name, Firstname = firstname, Password = password, Email = email, StuPro = Convert.ToBoolean(stuPro), Experience = 0, CreationDate = DateTime.UtcNow, LastLogin = date,AccessToken=Math.Abs(email.GetHashCode()+password.GetHashCode())*date.Ticks });
                 _context.SaveChanges();
                 u = (from e in _context.Users where e.Email == email select e).First();
                 return u.AccessToken;
@@ -57,7 +57,9 @@ namespace WebApi.Controllers
             else
                 return 0;
         }
-        public ActionResult<User> SeeUser([FromBody] string id,[FromHeader] string AccessToken)
+        [Route("SeeUser")]
+        [HttpGet]
+        public ActionResult<User> SeeUser( string id,[FromHeader]string AccessToken)
         {
             var u = (from e in _context.Users where e.AccessToken == Convert.ToInt64(AccessToken) select e).FirstOrDefault();
             if (u != null)
