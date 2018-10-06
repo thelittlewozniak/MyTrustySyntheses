@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SharedCode;
+using Newtonsoft.Json;
+using WebApi.Models;
+using System.Text;
+using System.Net.Http;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApp.Controllers
 {
@@ -45,13 +51,30 @@ namespace WebApp.Controllers
         }
 
         //Ajouter un cours
-        public IActionResult AddFile()
+        public async Task<IActionResult> AddFileConfAsync(File f)
         {
-            return View();
+            FileJson JsonU = new FileJson();
+            JsonU.Name = f.Name;
+            JsonU.Body = f.Body;
+            JsonU.CreatedAt = DateTime.Now;
+            //JsonU.AccessToken = long.Parse(HttpContext.Session.GetString("AccessToken"));
+            HttpClient client = new HttpClient();
+            string json = JsonConvert.SerializeObject(JsonU);
+            var res = await client.PostAsync("http://apimts.azurewebsites.net/api/File/AddFile", new StringContent(json, Encoding.UTF8, "application/json"));
+            bool response = await res.Content.ReadAsAsync<bool>();
+            if (response)
+            {
+                ViewBag.Message = "Fichier créé !";
+            }
+            else
+            {
+                ViewBag.Message = "Erreur lors de la création du fichier";
+            }
+            return View("ShowFile");
         }
 
         //Ajouter un cours Confirmation
-        public IActionResult AddFileConf()
+        public IActionResult AddFile()
         {
             return View();
         }

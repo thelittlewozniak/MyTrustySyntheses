@@ -3,11 +3,10 @@
     ViewBag.Title = "Consultation de la synthese";
     File f = ViewBag.file;
 }
-
 <h2>Consultation de la synthese</h2>
-
+@ViewBag.message
 <table class="table">
-    <tbody>        
+    <tbody>
         <tr>
             <td>Nom : @f.Name</td>
             <td>Auteur : @f.Creator</td>
