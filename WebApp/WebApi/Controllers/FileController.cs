@@ -82,6 +82,7 @@ namespace WebApi.Controllers
                     if (f != null)
                     {
                         _context.Grades.Add(new SharedCode.Grade { Creator = u, TrustLvl = trustLvl, CreationDate = DateTime.UtcNow, File = f });
+                        _context.Users.Where(e => e.Email == u.Email).FirstOrDefault().Experience += 5;
                         _context.SaveChanges();
                     }
                     return true;
