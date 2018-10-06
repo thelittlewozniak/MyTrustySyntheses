@@ -36,7 +36,7 @@ namespace WebApi.Controllers
             else
                 return 0;
         }
-        
+        [Route("DeleteFile")]
         public ActionResult<long> Delete(File file, [FromHeader] long accessToken)
         {
             var u = (from e in _context.Users where e.AccessToken == accessToken select e).FirstOrDefault();
@@ -52,7 +52,8 @@ namespace WebApi.Controllers
             else
                 return 0;
         }
-
+        [Route("RateFile")]
+        [HttpPost]
         public ActionResult<long> Rate(int trustLvl,File file, [FromHeader] long accessToken)
         {
             var u = (from e in _context.Users where e.AccessToken == accessToken select e).FirstOrDefault();
