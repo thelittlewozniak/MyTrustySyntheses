@@ -18,19 +18,25 @@ namespace WebApi.Controllers
         {
             _context = context;
         }
-        public ActionResult<long> Add(string name, string body, DateTime createdAt,Lesson lesson,[FromHeader] long accessToken)
+        [Route("AddFile")]
+        [HttpPost]
+        public ActionResult<long> Add(string name, string body, string lesson,[FromHeader] long accessToken)
         {
             var u = (from e in _context.Users where e.AccessToken == accessToken select e).FirstOrDefault();
             if (u != null)
             {
-                _context.Files.Add(new SharedCode.File { Name = name, Body = body, CreatedAt = DateTime.UtcNow, Creator = u, Lesson = lesson });
-                _context.SaveChanges();
+                var l = (from x in _context.Lessons where x.Name == lesson select x).FirstOrDefault();
+                if(l != null)
+                {
+                    _context.Files.Add(new SharedCode.File { Name = name, Body = body, CreatedAt = DateTime.UtcNow, Creator = u, Lesson = l });
+                    _context.SaveChanges();
+                }
                 return u.AccessToken;
             }
             else
                 return 0;
         }
-
+        
         public ActionResult<long> Delete(File file, [FromHeader] long accessToken)
         {
             var u = (from e in _context.Users where e.AccessToken == accessToken select e).FirstOrDefault();
