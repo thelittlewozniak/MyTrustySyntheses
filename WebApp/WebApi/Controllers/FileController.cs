@@ -91,6 +91,25 @@ namespace WebApi.Controllers
             else
                 return false;
         }
+        [Route("ShowFile")]
+        [HttpGet]
+        public ActionResult<File> ShowFile(string id, [FromHeader] long AccessToken)
+        {
+            var u = (from e in _context.Users where e.AccessToken == AccessToken select e).FirstOrDefault();
+            if (u != null)
+            {
+                var d = u.LastLogin.AddMinutes(15);
+                if (d.TimeOfDay < DateTime.UtcNow.TimeOfDay)
+                    return null;
+                else
+                {
+                    var i = Convert.ToInt32(id);
+                    return (from e in _context.Files where e.Id == i select e).FirstOrDefault();
+                }
+            }
+            else
+                return null;
+        }
         [Route("AlterFile")]
         [HttpPost]
         public ActionResult<bool> Alter(string title, string body,File oldFile,[FromHeader] long accessToken)
@@ -151,7 +170,7 @@ namespace WebApi.Controllers
             return list;
         }
         [Route("SeeFileCo")]
-        [HttpPost]
+        [HttpGet]
         public ActionResult<List<File>> SeeFileCo([FromHeader] string AccessToken)
         {
             var u = (from e in _context.Users where e.AccessToken == Convert.ToInt64(AccessToken) select e).FirstOrDefault();
@@ -161,7 +180,8 @@ namespace WebApi.Controllers
                 if (d.TimeOfDay < DateTime.UtcNow.TimeOfDay)
                     return null;
                 else
-                    return (from e in _context.Files where e.Lesson.School==u.School select e).ToList();
+                    //return (from e in _context.Files where e.Lesson.School==u.School select e).ToList();
+                    return (from e in _context.Files select e).ToList();
             }
             else
                 return null;

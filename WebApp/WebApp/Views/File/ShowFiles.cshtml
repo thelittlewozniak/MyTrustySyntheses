@@ -1,0 +1,23 @@
+﻿@using SharedCode
+@{
+    ViewBag.Title = "Show files";
+    List<File> files = ViewBag.files;
+}
+<h2>Consultation de la synthese</h2>
+@ViewBag.message
+<table class="table">
+    <tbody>
+        @foreach (File f in files)
+        {
+        <tr>
+            <td>Nom : @f.Name</td>
+            <td>Auteur : @f.Creator</td>
+            <td>Date Creation : @f.CreatedAt</td>
+            <td>@Html.ActionLink("Trust", "AddTrustFile", "User", new { idFile = f })</td>
+            <td>@f.Body</td>
+            <td>@Html.ActionLink("SHow file", "ShowFile","File", new { id = f.Id })</td>
+
+        </tr>
+        }
+    </tbody>
+</table>

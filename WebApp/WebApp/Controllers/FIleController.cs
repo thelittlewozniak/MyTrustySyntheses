@@ -36,27 +36,47 @@ namespace WebApp.Controllers
         {
             return View();
         }
-        public ActionResult ShowFile()
-        {
-            ShowFileAsync();
-            return View();
-        }
-        public async void ShowFileAsync()
+        public async Task<IActionResult> ShowFile(string id)
         {
             if (HttpContext.Session.GetString("AccessToken") != null && HttpContext.Session.GetString("AccessToken") != "0")
             {
                 HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Add("AccessToken", HttpContext.Session.GetString("AccessToken"));
-                var res = await client.GetAsync("https://localhost:44343/api/File/SeeFileCo");
-
+                var res = await client.GetAsync("https://localhost:44343/api/File/ShowFile?id="+id);
+                var responseString = await res.Content.ReadAsStringAsync();
+                File file = JsonConvert.DeserializeObject<File>(responseString);
+                ViewBag.file = file;
+                return View();
             }
             else
             {
-                ViewBag.tabFile[0] = null;
                 ViewBag.Message = "Erreur, vous n'êtes pas connecté !";
+                return RedirectToAction("ShowFiles");
             }
-            
            
+        }
+        public async Task<IActionResult> ShowFiles()
+        {
+            if (HttpContext.Session.GetString("AccessToken") != null && HttpContext.Session.GetString("AccessToken") != "0")
+            {
+                HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Add("AccessToken", HttpContext.Session.GetString("AccessToken"));
+                var res = await client.GetAsync("http://apimts.azurewebsites.net/api/File/SeeFileCo");
+                var responseString = await res.Content.ReadAsStringAsync();
+                List<File> files = JsonConvert.DeserializeObject<List<File>>(responseString);
+                ViewBag.files = files;
+                return View();
+            }
+            else
+            {
+                HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Add("AccessToken", HttpContext.Session.GetString("AccessToken"));
+                var res = await client.GetAsync("http://apimts.azurewebsites.net/api/File/SeeFileUnco");
+                var responseString = await res.Content.ReadAsStringAsync();
+                List<File> files = JsonConvert.DeserializeObject<List<File>>(responseString);
+                ViewBag.files = files;
+                return View();
+            }
         }
         [HttpPost]
         public async Task<IActionResult> AddFileConfAsync(File f)

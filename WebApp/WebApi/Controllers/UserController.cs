@@ -68,7 +68,7 @@ namespace WebApi.Controllers
                 if (d.TimeOfDay < DateTime.UtcNow.TimeOfDay)
                     return null;
                 else
-                    return (from e in _context.Users where e.Id == Convert.ToInt32(id) select e).Include(e => e.Files).FirstOrDefault();
+                    return (from e in _context.Users where e.Id == Convert.ToInt32(id) select e).FirstOrDefault();
             }
             else
                 return null;
