@@ -1,0 +1,28 @@
+﻿@using SharedCode
+@{
+    ViewData["Title"] = "User";
+    File f = ViewBag.file;
+}
+
+
+<h2> Description du fichier </h2>
+
+<table>
+    <tr>
+        <th>Nom</th>
+        <th>Categorie</th>
+        <th>Date Creation</th>
+        <th>Createur</th>
+    </tr>
+    <tr>
+        <td>@f.Name</td>
+        <td>@f.Lesson</td>
+        <td>@f.CreatedAt</td>
+        <td>@f.Creator</td>
+    </tr>
+</table>
+
+Contenu :
+@f.Body
+
+
