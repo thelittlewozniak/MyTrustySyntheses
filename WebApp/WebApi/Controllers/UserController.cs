@@ -23,7 +23,6 @@ namespace WebApi.Controllers
         [HttpPost]
         public ActionResult<long> Login(UserJson json)
         {
-            
             byte[] data = System.Text.Encoding.ASCII.GetBytes(json.password);
             data = new System.Security.Cryptography.SHA256Managed().ComputeHash(data);
             json.password = System.Text.Encoding.ASCII.GetString(data);
@@ -43,7 +42,7 @@ namespace WebApi.Controllers
         [HttpPost]
         public ActionResult<long> Create(UserJson json)
         {
-            var u = (from e in _context.Users where e.Email == email select e).FirstOrDefault();
+            var u = (from e in _context.Users where e.Email == json.email select e).FirstOrDefault();
             if (u == null)
             {
                 byte[] data = System.Text.Encoding.ASCII.GetBytes(json.password);
