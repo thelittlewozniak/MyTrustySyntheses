@@ -89,5 +89,39 @@ namespace WebApi.Controllers
             else
                 return 0;
         }
+        [Route("SimpleSearchContentFile")]
+        [HttpPost]
+        public List<File> SimpleSearchContent(string search)
+        {
+            List<File> list = new List<File>();
+
+            foreach(File f in _context.Files)
+            {
+                if(f.Name.Contains(search) || f.Body.Contains(search))
+                {
+                    list.Add(f);
+                }
+            }
+            return list;
+        }
+
+        [Route("SimpleSearchUserFile")]
+        [HttpPost]
+        public List<User> SimpleSearchUser(string search) //IL faut préciser dans le placeholder que c'est le nom qui doit être entrer en 1er et ensuite le prénom
+        {
+            List<User> list = new List<User>();
+            string find = " ";
+            int position = search.IndexOf(find);
+            string lastname = search.Substring(0,position - 1);
+            string firstname = search.Substring(position + 1, search.Length);
+            foreach (User u in _context.Users)
+            {
+                if (u.Firstname == firstname && u.Name == lastname)
+                {
+                    list.Add(u);
+                }
+            }
+            return list;
+        }
     }
 }
