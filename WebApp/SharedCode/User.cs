@@ -16,5 +16,6 @@ namespace SharedCode
         public List<User> Trusters { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime LastLogin { get; set; }
+        virtual public List<File> Files { get; set; }
     }
 }

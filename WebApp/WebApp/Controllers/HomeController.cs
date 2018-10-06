@@ -10,27 +10,28 @@ namespace WebApp.Controllers
 {
     public class HomeController : Controller
     {
+        //Index
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult About()
+        //Register
+        public IActionResult Register()
         {
-            ViewData["Message"] = "Your application description page.";
-
             return View();
         }
 
-        public IActionResult Contact()
+        //Login
+        public IActionResult Login()
         {
-            ViewData["Message"] = "Your contact page.";
-
             return View();
         }
 
-        public IActionResult Privacy()
+        //About
+        public IActionResult AboutUs()
         {
+            ViewData["Message"] = "GameJam 2018 KYT";
             return View();
         }
 
@@ -38,6 +39,6 @@ namespace WebApp.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        }        
     }
 }

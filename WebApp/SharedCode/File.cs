@@ -8,7 +8,11 @@ namespace SharedCode
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Body { get; set; }
         public Lesson Lesson { get; set; }
+        public User Creator { get; set; }
+        public DateTime CreatedAt { get; set; }
+
         virtual public List<Grade> Grades { get; set; }
     }
 }
