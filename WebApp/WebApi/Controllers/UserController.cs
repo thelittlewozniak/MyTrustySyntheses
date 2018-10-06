@@ -39,7 +39,7 @@ namespace WebApi.Controllers
                 return 0;
         }
         [Route("Create")]
-        [HttpGet]
+        [HttpPost]
         public ActionResult<long> Create(string name,string firstname,string password,string email,string stuPro)
         {
             var u = (from e in _context.Users where e.Email == email select e).FirstOrDefault();
@@ -58,7 +58,7 @@ namespace WebApi.Controllers
                 return 0;
         }
         [Route("SeeUser")]
-        [HttpGet]
+        [HttpPost]
         public ActionResult<User> SeeUser( string id,[FromHeader]string AccessToken)
         {
             var u = (from e in _context.Users where e.AccessToken == Convert.ToInt64(AccessToken) select e).FirstOrDefault();
