@@ -5,54 +5,52 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/solar/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/solar/bootstrap.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
 </head>
 <body>
-    @{
-        if (HttpContextAccessor.HttpContext.Session.GetString("AccessToken") != null)
-        {
-            <div class="navbar navbar-inverse navbar-fixed-top">
-                <div class="container">
-                    <div class="navbar-header">
-                        @Html.ActionLink("Accueil", "Index", "Home", new { @class = "navbar-brand" })
-                    </div>
-                    <div class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav">
-                            <li>@Html.ActionLink("Ajout de Synthese", "AddFile", "File")</li>
-                            <li>@Html.ActionLink("Recherche Note", "ResearchCourse", "User")</li>
-                            <li>@Html.ActionLink("Recherche Personne", "ResearchUser", "User")</li>
-                            <li>@Html.ActionLink("Voir Syntheses", "ShowFile", "File")</li>
-                            <li>@Html.ActionLink("Mon Profil", "MyProfile", "User")</li>
-                            <li>@Html.ActionLink("A Propos", "AboutUs", "Home")</li>
-                        </ul>
-                        <ul class="nav navbar-nav navbar-right">
-                            <li>@Html.ActionLink("Deconnexion", "Disconnect", "Account")</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        }
-        else
-        {
-            <div class="navbar navbar-inverse navbar-fixed-top">
-                <div class="container">
-                    <div class="navbar-header">
-                        @Html.ActionLink("Accueil", "Index", "Home", new { @class = "navbar-brand" })
-                    </div>
-                    <div class="navbar-header">
-                        @Html.ActionLink("A propos", "AboutUs", "Home")
-                    </div>
-                    <div class="navbar-header">
-                        @Html.ActionLink("Inscription", "Register", "Account")
-                    </div>
-                    <div class="navbar-header">
-                        @Html.ActionLink("Login", "Login", "Account")
-                    </div>
-                </div>
-            </div>
-        }
-    }
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a asp-controller="Home" asp-action="Index" class="navbar-brand">Accueil</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarColor03">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a asp-controller="File" asp-action="ShowFiles" class="nav-link">Syntheses</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Home" asp-action="AboutUs" class="nav-link">About us</a>
+                </li>
+                @if (HttpContextAccessor.HttpContext.Session.GetString("AccessToken") != null && HttpContextAccessor.HttpContext.Session.GetString("AccessToken") != "0")
+                {
+                    <li class="nav-item">
+                        <a asp-controller="User" asp-action="ShowUser" class="nav-link">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Account" asp-action="Disconnect" class="nav-link">Disconnect</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a asp-controller="Account" asp-action="Register" class="nav-link">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Account" asp-action="Login" class="nav-link">Login</a>
+                    </li>
+
+                }
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
     <div class="container body-content">
         @RenderBody()
 

@@ -195,7 +195,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public ActionResult<List<File>> SeeFileUnco()
         {
-            return _context.Files.ToList();
+            return _context.Files.Include(e=>e.Creator).ToList();
         }
     }
 }
