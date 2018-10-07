@@ -1,0 +1,35 @@
+﻿@model SharedCode.File
+@{
+    ViewBag.Title = "Ajouter une sythese";
+}
+
+<h2>Ajouter une synthese</h2>
+<div>
+    @using (Html.BeginForm("AddFileConfAsync", "File"))
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name)
+            @Html.TextBoxFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Creator)
+            @Html.TextBoxFor(model => model.Creator)
+            @Html.ValidationMessageFor(model => model.Creator)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CreatedAt)
+            @Html.TextBoxFor(model => model.CreatedAt)
+            @Html.ValidationMessageFor(model => model.CreatedAt)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Body)
+            @Html.TextBoxFor(model => model.Body)
+            @Html.ValidationMessageFor(model => model.Body)
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Sauvegarder" />
+        </div>
+    }
+    <div>@ViewBag.Message</div>
+</div>

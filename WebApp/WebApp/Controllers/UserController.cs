@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SharedCode;
+using Newtonsoft.Json;
+using WebApi.Models;
+using System.Text;
+using System.Net.Http;
+using Microsoft.AspNetCore.Http;
+
 
 namespace WebApp.Controllers
 {
@@ -39,19 +46,30 @@ namespace WebApp.Controllers
         }
 
         //Afficher un user
-        public IActionResult ShowUser()
+        public async Task<IActionResult> ShowUser()
         {
-            return View();
+            if (HttpContext.Session.GetString("AccessToken") != null && HttpContext.Session.GetString("AccessToken") != "0")
+            {
+                HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Add("AccessToken", HttpContext.Session.GetString("AccessToken"));
+                var res = await client.GetAsync("http://apimts.azurewebsites.net/api/User/SeeUser");
+                var responseString = await res.Content.ReadAsStringAsync();
+                var u= JsonConvert.DeserializeObject<User>(responseString);
+                ViewBag.user = u;
+                return View();
+            }
+            else
+            {
+                
+                return View("Index");
+            }
         }
 
         //Ajouter un cours
-        public IActionResult AddFile()
-        {
-            return View();
-        }
+       
 
         //Ajouter un cours Confirmation
-        public IActionResult AddFileConf()
+        public IActionResult AddFile()
         {
             return View();
         }

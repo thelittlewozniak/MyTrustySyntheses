@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using WebApp.Models;
 
 namespace WebApp.Controllers
@@ -15,19 +17,6 @@ namespace WebApp.Controllers
         {
             return View();
         }
-
-        //Register
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        //Login
-        public IActionResult Login()
-        {
-            return View();
-        }
-
         //About
         public IActionResult AboutUs()
         {

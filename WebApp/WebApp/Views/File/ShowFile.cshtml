@@ -1,0 +1,18 @@
+﻿@using SharedCode
+@{
+    ViewBag.Title = "Consultation de la synthese";
+    File f = ViewBag.file;
+}
+<h2>Consultation de la synthese</h2>
+@ViewBag.message
+<table class="table">
+    <tbody>
+        <tr>
+            <td>Nom : @f.Name</td>
+            <td>Auteur : @f.Creator.Email</td>
+            <td>Date Creation : @f.CreatedAt</td>
+            <td>@Html.ActionLink("Trust", "AddTrust", "File", new { idFile = f.Id }, null)</td>
+            <td>@f.Body</td>
+        </tr>
+    </tbody>
+</table>
