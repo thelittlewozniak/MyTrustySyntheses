@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 using SharedCode;
 using Newtonsoft.Json;
+
 using WebApi.Models;
 using System.Text;
 using Microsoft.AspNetCore.Http;
@@ -23,7 +24,6 @@ namespace WebApp.Controllers
         {
             return RedirectToAction("Index", "Home");
         }
-
         //Register
         public IActionResult Register()
         {
@@ -60,6 +60,7 @@ namespace WebApp.Controllers
 
         //Login Confirmation
         [HttpPost]
+
         public async Task<ActionResult> LoginConf(User u)
         {
             UserJson j = new UserJson();
@@ -70,6 +71,7 @@ namespace WebApp.Controllers
             var responseString = await res.Content.ReadAsStringAsync();
             string AccessToken = JsonConvert.DeserializeObject<string>(responseString);
             HttpContext.Session.SetString("AccessToken", Convert.ToString(AccessToken));
+
             return View("Login");
         }
 
